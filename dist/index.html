@@ -1,0 +1,55 @@
+<!DOCTYPE html><html><head><style>
+  :root {
+    --DEFAULT-background-color: #292929;
+    --DEFAULT-primary-color: #b0c8e8;
+    --DEFAULT-secondary-color: #d19f08;
+  }
+
+  html {
+    height: 100vh;
+    display: flex;
+    font-family: CascadiaCode, monospace;
+  }
+
+  body {
+    margin: 0px;
+    padding: 0px;
+    flex-grow: 1;
+
+  }
+</style>
+
+
+<link rel="preload" href="/spotify_analytics_dashboard_2-e0f333643bfc1e50_bg.wasm" as="fetch" type="application/wasm" crossorigin="">
+<link rel="modulepreload" href="/spotify_analytics_dashboard_2-e0f333643bfc1e50.js"></head>
+
+<body>
+
+<script type="module">import init from '/spotify_analytics_dashboard_2-e0f333643bfc1e50.js';init('/spotify_analytics_dashboard_2-e0f333643bfc1e50_bg.wasm');</script><script>(function () {
+    var protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+    var url = protocol + '//' + window.location.host + '/_trunk/ws';
+    var poll_interval = 5000;
+    var reload_upon_connect = () => {
+        window.setTimeout(
+            () => {
+                // when we successfully reconnect, we'll force a
+                // reload (since we presumably lost connection to
+                // trunk due to it being killed, so it will have
+                // rebuilt on restart)
+                var ws = new WebSocket(url);
+                ws.onopen = () => window.location.reload();
+                ws.onclose = reload_upon_connect;
+            },
+            poll_interval);
+    };
+
+    var ws = new WebSocket(url);
+    ws.onmessage = (ev) => {
+        const msg = JSON.parse(ev.data);
+        if (msg.reload) {
+            window.location.reload();
+        }
+    };
+    ws.onclose = reload_upon_connect;
+})()
+</script></body></html>
